@@ -22,7 +22,6 @@ def create_map(data, selected_sects):
         if row['소속단체(종단)'] in selected_sects:
             popup_content = f"""
             <b>사찰명:</b> {row['사찰명']}<br>
-            <b>구분:</b> {row['구분']}<br>
             <b>시도:</b> {row['시도']}<br>
             <b>상세주소:</b> {row['상세주소']}<br>
             <b>위도:</b> {row['Latitude']}<br>
