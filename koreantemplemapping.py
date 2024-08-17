@@ -10,7 +10,7 @@ import plotly.express as px
 def load_data():
     # GitHub에서 직접 데이터를 로드합니다.
     # 이 URL은 실제 데이터 파일의 raw GitHub URL로 교체해야 합니다.
-    url = "https://github.com/hwa0mb0y/202408-AI/blob/main/fulldata_koreantemple.csv"
+    url = "https://raw.githubusercontent.com/hwa0mb0y/202408-AI/main/fulldata_koreantemple.csv"
     return pd.read_csv(url)
 
 def create_map(data, selected_sects):
