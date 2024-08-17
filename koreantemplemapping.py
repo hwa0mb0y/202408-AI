@@ -39,6 +39,8 @@ def create_map(data, selected_sects):
                 icon = folium.Icon(color='red', icon='info-sign')
             elif row['소속단체(종단)'] == '태고종':
                 icon = folium.Icon(color='blue', icon='cloud')
+            elif row['소속단체(종단)'] == '선학원':
+                icon = folium.Icon(color='purple', icon='star')
             else:
                 icon = folium.Icon(color='green', icon='leaf')
 
@@ -60,22 +62,30 @@ def main():
 
     data = load_data()
 
-    # 종단 선택
-    all_sects = sorted(data['소속단체(종단)'].unique())
+    # 종단을 갯수로 세어서 종단 리스트를 만듭니다.
+    sect_counts = data['소속단체(종단)'].value_counts()
+    all_sects = sect_counts.index.tolist()
     
-    # '전체 선택' 버튼 포함
+    # '전체 선택' 옵션 추가
+    all_sects_with_select_all = ['전체 선택'] + all_sects
+    
     selected_sects = st.multiselect(
-            '표시할 소속단체(종단)를 선택하세요',
-            all_sects,
-            default=all_sects
-        )
-    if st.button('전체 종단 선택'):
+        '표시할 소속단체(종단)를 선택하세요 (갯수 많은 순)',
+        all_sects_with_select_all,
+        default=None
+    )
+    
+    # '전체 선택' 처리
+    if '전체 선택' in selected_sects:
         selected_sects = all_sects
+    else:
+        selected_sects = [sect for sect in selected_sects if sect != '전체 선택']
+    
     
     # 지도 생성
     if selected_sects:
         m = create_map(data, selected_sects)
-        folium_static(m)
+        folium_static(m, width=1000, height=600)
     else:
         st.warning('하나 이상의 소속단체(종단)를 선택해주세요.')
 
