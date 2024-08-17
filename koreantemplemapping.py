@@ -64,15 +64,14 @@ def main():
     all_sects = sorted(data['소속단체(종단)'].unique())
     
     # '전체 선택' 버튼 포함
-    if st.button('전체 종단 선택'):
-        selected_sects = all_sects
-    else:
-        selected_sects = st.multiselect(
+    selected_sects = st.multiselect(
             '표시할 소속단체(종단)를 선택하세요',
             all_sects,
             default=all_sects
         )
-
+    if st.button('전체 종단 선택'):
+        selected_sects = all_sects
+    
     # 지도 생성
     if selected_sects:
         m = create_map(data, selected_sects)
