@@ -2,6 +2,7 @@
 
 import pandas as pd
 import folium
+from folium.plugins import MarkerCluster
 import streamlit as st
 from streamlit_folium import folium_static
 import plotly.express as px
@@ -18,10 +19,14 @@ def create_map(data, selected_sects):
     center_lon = data['Longitude'].mean()
     m = folium.Map(location=[center_lat, center_lon], zoom_start=7)
 
+    # 마커 클러스터 생성
+    marker_cluster = MarkerCluster().add_to(m)
+
     for idx, row in data.iterrows():
         if row['소속단체(종단)'] in selected_sects:
             popup_content = f"""
             <b>사찰명:</b> {row['사찰명']}<br>
+            <b>구분:</b> {row['구분']}<br>
             <b>시도:</b> {row['시도']}<br>
             <b>상세주소:</b> {row['상세주소']}<br>
             <b>위도:</b> {row['Latitude']}<br>
@@ -29,13 +34,23 @@ def create_map(data, selected_sects):
             <b>소속단체(종단):</b> {row['소속단체(종단)']}
             """
             
+            # 종단에 따라 다른 아이콘 사용
+            if row['소속단체(종단)'] == '조계종':
+                icon = folium.Icon(color='red', icon='info-sign')
+            elif row['소속단체(종단)'] == '태고종':
+                icon = folium.Icon(color='blue', icon='cloud')
+            else:
+                icon = folium.Icon(color='green', icon='leaf')
+
             folium.Marker(
                 location=[row['Latitude'], row['Longitude']],
                 popup=folium.Popup(popup_content, max_width=300),
-                tooltip=row['사찰명']
-            ).add_to(m)
+                tooltip=row['사찰명'],
+                icon=icon
+            ).add_to(marker_cluster)
     
     return m
+
 
 def main():
     st.title('한국 전통사찰 지도')
