@@ -47,7 +47,7 @@ def create_map(data, selected_sects):
                 popup=folium.Popup(popup_content, max_width=300),
                 tooltip=row['사찰명'],
                 icon=icon
-            ).add_to(marker_cluster)
+            ).add_to(m)
     
     return m
 
