@@ -42,12 +42,15 @@ def create_map(data, selected_sects):
             else:
                 icon = folium.Icon(color='green', icon='leaf')
 
+            # 해결 방법 2: FeatureGroup 사용
+            fg = folium.FeatureGroup(name=row['소속단체(종단)'])
             folium.Marker(
                 location=[row['Latitude'], row['Longitude']],
                 popup=folium.Popup(popup_content, max_width=300),
                 tooltip=row['사찰명'],
                 icon=icon
-            ).add_to(m)
+            ).add_to(fg)
+            fg.add_to(m)
     
     return m
 
