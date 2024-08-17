@@ -20,7 +20,7 @@ def create_map(data, selected_sects):
     m = folium.Map(location=[center_lat, center_lon], zoom_start=7)
 
     # 마커 클러스터 생성
-    marker_cluster = MarkerCluster().add_to(m)
+    sect_groups = {sect: folium.FeatureGroup(name=sect) for sect in selected_sects}
 
     for idx, row in data.iterrows():
         if row['소속단체(종단)'] in selected_sects:
@@ -34,25 +34,32 @@ def create_map(data, selected_sects):
             <b>소속단체(종단):</b> {row['소속단체(종단)']}
             """
             
-            # 종단에 따라 다른 아이콘 사용
+            # 종단에 따라 다른 색상으로 마커를 표시합니다.
             if row['소속단체(종단)'] == '조계종':
-                icon = folium.Icon(color='red', icon='info-sign')
+                color='red'
             elif row['소속단체(종단)'] == '태고종':
-                icon = folium.Icon(color='blue', icon='cloud')
+                color='blue'
             elif row['소속단체(종단)'] == '선학원':
-                icon = folium.Icon(color='purple', icon='star')
+                color='purple'
             else:
-                icon = folium.Icon(color='green', icon='leaf')
+                color='green'
 
-            # 해결 방법 2: FeatureGroup 사용
-            fg = folium.FeatureGroup(name=row['소속단체(종단)'])
-            folium.Marker(
+            
+            folium.CircleMarker(
                 location=[row['Latitude'], row['Longitude']],
+                radius=4,
                 popup=folium.Popup(popup_content, max_width=300),
                 tooltip=row['사찰명'],
-                icon=icon
-            ).add_to(fg)
-            fg.add_to(m)
+                color=color,
+                fill=True,
+                fillColor=color,
+                fillOpacity=0.7,
+            ).add_to(sect_groups[row['소속단체(종단)']])
+    
+    for group in sect_groups.values():
+        group.add_to(m)
+    
+    folium.LayerControl().add_to(m)
     
     return m
 
