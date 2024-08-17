@@ -19,7 +19,15 @@ def create_map(data, selected_sects):
     center_lon = data['Longitude'].mean()
     m = folium.Map(location=[center_lat, center_lon], zoom_start=7)
 
-    # 마커 클러스터 생성
+    # 색상 매핑 정의
+    color_map = {
+        '조계종': 'red',
+        '태고종': 'blue',
+        '선학원': 'green',
+        '그 외': 'gray'
+    }
+
+    # 각 종단별로 FeatureGroup을 만듭니다.
     sect_groups = {sect: folium.FeatureGroup(name=sect) for sect in selected_sects}
 
     for idx, row in data.iterrows():
@@ -56,6 +64,7 @@ def create_map(data, selected_sects):
                 fillOpacity=0.7,
             ).add_to(sect_groups[row['소속단체(종단)']])
     
+    # 각 FeatureGroup을 지도에 추가합니다.
     for group in sect_groups.values():
         group.add_to(m)
     
