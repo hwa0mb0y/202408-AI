@@ -1,4 +1,12 @@
-# app.py
+# korean_temple_mapping.py
+# 이 프로그램은 한국 전통사찰 데이터를 지도에 표시하는 프로그램입니다.
+# 데이터는 문화관광부에서 제공하는 '한국 전통사찰 정보' 데이터를 사용합니다.
+# 데이터 출처: https://www.mcst.go.kr/kor/s_policy/dept/deptView.jsp?pCurrentPage=1&pType=03&pTab=01&pSeq=1572&pDataCD=0417000000&pSearchType=01&pSearchWord=전통사찰+현황
+# 해당 엑셀 파일을 다운 받아서 주소를 지오코딩하여 위도, 경도를 구한 후 CSV 파일로 저장합니다.
+# 이 프로그램은 Streamlit을 사용하여 지도와 차트를 표시합니다.
+# 이 프로그램의 streamlit 주소는 다음과 같습니다.
+# https://koreantemplemapping.streamlit.app
+# 향후 개선사항: 너무 많아서 열거 불가능합니다. ㅎㅎㅎ...
 
 import pandas as pd
 import folium
